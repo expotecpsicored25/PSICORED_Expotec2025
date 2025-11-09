@@ -1,0 +1,44 @@
+/* app/globals.css */
+
+/* 1. External Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* 2. CRÍTICO: Usar las directivas @tailwind correctas. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* * 3. Estilos de Reinicio y Variables Globales (Opcionales) */
+
+:root {
+  font-family: 'Inter', sans-serif;
+
+  --color-primary: #1e40af;
+  /* Blue-700 */
+  --color-accent: #3b82f6;
+  /* Blue-500 */
+  --color-background: #f9fafb;
+  /* Gray-50 */
+}
+
+/* * 4. Estilos de Reseteo Básico */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--color-background);
+  color: #1f2937;
+  /* Gray-800 */
+}
+
+/* * 5. Estilos para enlaces */
+a {
+  text-decoration: none;
+}
+
+/* * 6. Estilo base para botones */
+button {
+  cursor: pointer;
+}
+
