@@ -21,8 +21,8 @@ const AppointmentSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Pendiente', 'Confirmada', 'Completada', 'Canceleda'],
-    default: 'Pendiente'
+    enum: ['pending', 'confirmed', 'completed', 'canceled'],
+    default: 'pending'
   },
 
   // ✅ NUEVO CAMPO: Motivo de cancelación
@@ -30,7 +30,7 @@ const AppointmentSchema = new mongoose.Schema({
     type: String,
     required: function () {
       // La razón es requerida si, y solo si, el estado es 'canceled'
-      return this.status === 'Canceleda';
+      return this.status === 'canceled';
     },
     trim: true,
     default: null, // Es nulo si la cita no ha sido cancelada

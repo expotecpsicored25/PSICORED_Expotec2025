@@ -1,10 +1,10 @@
-'use client'; 
+'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
-import Link from 'next/link'; 
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 // Asumiendo que este es el camino correcto para LogoutButton
-import LogoutButton from '@/components/LogoutButton'; 
+import LogoutButton from '@/components/LogoutButton';
 
 // -----------------------------------------------------------
 // 1. Componentes de UI 
@@ -24,21 +24,21 @@ function StatusBox({ title, count, bgColor }) {
 function AppointmentCard({ appointment }) {
     const formatDateTime = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', { 
+        return date.toLocaleDateString('es-ES', {
             weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
-            hour: '2-digit', minute: '2-digit' 
+            hour: '2-digit', minute: '2-digit'
         });
     };
-    
+
     const statusClasses = {
         confirmed: "bg-green-100 text-green-800 border-l-green-500",
         pending: "bg-yellow-100 text-yellow-800 border-l-yellow-500",
         canceled: "bg-red-100 text-red-800 border-l-red-500",
         completed: "bg-blue-100 text-blue-800 border-l-blue-500"
     };
-    
+
     // Obtener información del psicólogo
-    const entityName = appointment.psychologist?.name || 'Psicólogo/a Asignado/a'; 
+    const entityName = appointment.psychologist?.name || 'Psicólogo/a Asignado/a';
     const isCanceled = appointment.status === 'canceled';
 
     return (
@@ -61,8 +61,8 @@ function AppointmentCard({ appointment }) {
                 )}
                 {/* ---------------------------------------------------- */}
             </div>
-            
-            <span className={`px-3 py-1 text-xs font-semibold rounded-full capitalize ${statusClasses[appointment.status].split(' ')[0]} bg-opacity-70 flex-shrink-0 ml-4`}>
+
+            <span className={`px-3 py-1 text-xs font-semibold rounded-full capitalize ${statusClasses[appointment.status]} bg-opacity-70 flex-shrink-0 ml-4`}>
                 {appointment.status}
             </span>
         </div>
@@ -74,16 +74,16 @@ function AppointmentCard({ appointment }) {
 // -----------------------------------------------------------
 async function fetchStudentAppointments() {
     const res = await fetch('/api/appointments', {
-        cache: 'no-store' 
+        cache: 'no-store'
     });
-    
+
     if (!res.ok) {
         const errorData = await res.json().catch(() => ({ message: 'Error de red desconocido o respuesta vacía.' }));
         throw new Error(errorData.message || 'Fallo al cargar las citas.');
     }
-    
+
     const data = await res.json();
-    return data.appointments; 
+    return data.appointments;
 }
 
 
@@ -93,8 +93,8 @@ async function fetchStudentAppointments() {
 export default function DashboardPage() {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const router = useRouter(); 
-    const [userName, setUserName] = useState('Estudiante'); 
+    const router = useRouter();
+    const [userName, setUserName] = useState('Estudiante');
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -102,7 +102,7 @@ export default function DashboardPage() {
         if (storedName) {
             setUserName(storedName.split(' ')[0]);
         }
-        
+
         async function loadAppointments() {
             setLoading(true);
             setError(null);
@@ -115,10 +115,10 @@ export default function DashboardPage() {
                     if (orderDiff !== 0) return orderDiff;
                     return new Date(a.date) - new Date(b.date);
                 });
-                
+
                 setAppointments(sortedAppointments);
             } catch (err) {
-                if (err.message.includes('No autenticado')) { 
+                if (err.message.includes('No autenticado')) {
                     router.replace('/login');
                 } else {
                     setError(err.message);
@@ -130,7 +130,7 @@ export default function DashboardPage() {
 
         loadAppointments();
     }, [router]);
-    
+
     // Conteo de citas para las cajas de resumen
     const pendingCount = appointments.filter(a => a.status === 'pending').length;
     const confirmedCount = appointments.filter(a => a.status === 'confirmed').length;
@@ -138,16 +138,16 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans">
-            <main className="container mx-auto px-4 py-6 max-w-6xl"> 
+            <main className="container mx-auto px-4 py-6 max-w-6xl">
                 <div className="space-y-8 py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-                    
+
                     {/* Encabezado */}
                     <div className="flex justify-between items-center border-b pb-4">
-                        <h1 className="text-3xl font-extrabold text-blue-800"> ✨ Dashboard de, {userName} ✨</h1> 
+                        <h1 className="text-3xl font-extrabold text-blue-800"> ✨ Dashboard de, {userName} ✨</h1>
                         {/* Asumiendo que LogoutButton se importa de components */}
-                        <LogoutButton /> 
+                        <LogoutButton />
                     </div>
-                    
+
                     {/* Resumen de Citas */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <StatusBox title="Citas Pendientes" count={pendingCount} bgColor="bg-yellow-500" />

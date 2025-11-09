@@ -94,7 +94,7 @@ export async function POST(request) {
 
     // 2. Autenticación y Autorización
     const cookieStore = cookies();
-    const tokenCookie = cookieStore.get(process.env.COOKIE_NAME || 'psicored_token');
+    const tokenCookie = await cookieStore.get(process.env.COOKIE_NAME || 'psicored_token');
     const tokenValue = tokenCookie?.value; // Accede al valor de forma segura y separada
 
     console.log(`DEBUG COOKIE: Cookie leída en POST, valor presente: ${!!tokenValue}`); // LOG DE DEBUG
